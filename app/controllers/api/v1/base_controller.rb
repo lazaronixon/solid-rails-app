@@ -32,6 +32,10 @@ module API::V1
       end
     end
 
+    def current_account
+      @current_account ||= current_user.account
+    end
+
     def render_json_with_success(status:, data: nil)
       json = {status: :success}
 
@@ -49,9 +53,9 @@ module API::V1
       render status:, json: {status: :error, message:, details:}
     end
 
-    def render_json_with_record_errors(record)
-      message = record.errors.full_messages.join(", ")
-      details = record.errors.messages
+    def render_json_with_model_errors(model)
+      message = model.errors.full_messages.join(", ")
+      details = model.errors.messages
 
       render_json_with_error(status: :unprocessable_entity, message:, details:)
     end
